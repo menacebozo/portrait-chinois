@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire</title>
+</head>
+
+<body>
+    <h1>Auto-portrait Si j'étais...</h1>
+    <div class="liste-analogies">
+        <section>
+            <h2>Si j’étais <span id="analogieSuggeree"></span>, je serais <span id="valeurAnalogieSuggeree"></span>.
+            </h2>
+        </section>
+
+    </div>
+    <form>
+        Merci de me suggérer une nouvelle analogie pour mon portrait :
+        <br>
+        <label for="analogie">Analogie (si j'étais...) :</label>
+        <br>
+        <input type="text" id="analogie" name="analogie" required>
+        <br>
+        <label for="valeurAnalogie">Valeur de l'analogie (je serais ...) :</label>
+        <br>
+        <input type="text" id="valeurAnalogie" name="valeurAnalogie" required>
+        <br>
+        <label for="courriel">Votre adresse de courriel :</label>
+        <br>
+        <input type="email" id="courriel" name="courriel" required>
+        <br>
+        <input type="button" id="envoi" value="Envoyer le message !">
+        <div id="messageApresEnvoi"></div>
+    </form>
+    <script src="data.js"></script>
+    <script>
+        // TP7 Q4 Détection du clic sur le bouton d'envoi du formulaire
+        document.querySelector("#envoi").addEventListener('click', function (e) {
+            // TP7 Q5 Personnalisation du lien affiché dans la console
+            //console.log("https://perso-etudiant.u-pem.fr/~gambette/portrait/api.php?format=json&login=gambette&courriel=" + document.querySelector("#courriel").value + "&message=Si j'étais ... " + document.querySelector("#analogie").value + " je serais ... " + document.querySelector("#valeurAnalogie").value);
+            // TP7 Q6 Envoi des données à l'API à l'adresse ci-dessus
+            var urlVisitee = "https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" + document.querySelector("#courriel").value + "&message=Si j'étais ... " + document.querySelector("#analogie").value + " je serais ... " + document.querySelector("#valeurAnalogie").value;
+            fetch(urlVisitee).then(function (response) {
+                response.json().then(function (data) {
+                    //console.log("Réponse reçue : ")
+                    //console.log(data);
+                    if(data.status == "success"){
+                    document.querySelector("#messageApresEnvoi").innerHTML = "Votre message a bien été reçu";
+                }else{
+                    document.querySelector("#messageApresEnvoi").innerHTML = "Problème : votre message n'a pas été reçu";
+                }
+                })
+            })
+
+        })
+
+        // TP6 Q2 document.querySelector("#analogie").value
+        // TP6 Q3 et Q4 Détection qu'une touche du clavier a été relâchée sur le champ analogie
+        document.querySelector("#analogie").addEventListener('keyup', function (e) {
+            console.log("Champ analogie modifié");
+            // TP6 Q5 Remplissage de la phrase de l'analogie suggérée
+            document.querySelector("#analogieSuggeree").innerHTML = document.querySelector("#analogie").value;
+        })
+
+        document.querySelector("#valeurAnalogie").addEventListener('keyup', function (e) {
+            console.log("Champ valeurAnalogie modifié");
+            // TP6 Q5 Remplissage de la phrase de l'analogie suggérée
+            document.querySelector("#valeurAnalogieSuggeree").innerHTML = document.querySelector("#valeurAnalogie").value;
+        })
+
+
+        // Q3 Afficher le tableau analogies dans la console
+        console.log(analogies);
+
+        // Q4 Afficher "Si j'étais" suivi de chaque analogie
+        analogies.forEach(function afficheNote(analogie) {
+            // Affichage de chaque case du tableau, appelée analogie
+            console.log("Si j'étais " + analogie);
+            console.log("<section><h2>Si j’étais " + analogie + ", je serais [une valeur de l’analogie].</h2></section>");
+
+            // Q5 Afficher un bloc HTML pour chaque analogie
+            //document.querySelector('.liste-analogies').innerHTML = document.querySelector('.liste-analogies').innerHTML + "<section><h2>Si j’étais " + analogie + ", je serais [une valeur de l’analogie].</h2></section>";
+            document.querySelector('.liste-analogies').innerHTML += "<section><h2>Si j’étais " + analogie + ", je serais [une valeur de l’analogie].</h2></section>";
+
+        })
+
+    </script>
+</body>
+
+</html>
